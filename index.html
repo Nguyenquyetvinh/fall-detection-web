@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <title>Hệ thống giám sát ngã</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Hệ thống giám sát ngã</h1>
+            <p>Giám sát hoạt động và phát hiện ngã</p>
+            <div id="connection-status" style="color:green"><i class="fas fa-wifi"></i> Đã kết nối</div>
+        </header>
+        <div class="dashboard">
+            <div id="fallAlert" class="fall-alert">
+                <h2><i class="fas fa-exclamation-triangle"></i> CẢNH BÁO: NGÃ!</h2>
+                <p>Vui lòng kiểm tra ngay!</p>
+                <button class="btn btn-primary" onclick="confirmCheck()"><i class="fas fa-check-circle"></i> Đã kiểm tra</button>
+            </div>
+            <div class="card status-card">
+                <div class="card-header">Trạng thái</div>
+                <div id="activityStatus" class="status-display normal">
+                    <div class="status-icon"><i class="fas fa-walking"></i></div>
+                    <p class="activity" id="currentActivity">Đang khởi tạo...</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">Cảm biến</div>
+                <div class="sensor-grid">
+                    <div class="sensor-box"><h3>X</h3><div class="sensor-value" id="accelX">0.00</div><span>g</span></div>
+                    <div class="sensor-box"><h3>Y</h3><div class="sensor-value" id="accelY">0.00</div><span>g</span></div>
+                    <div class="sensor-box"><h3>Z</h3><div class="sensor-value" id="accelZ">0.00</div><span>g</span></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">Biểu đồ</div>
+                <div class="chart-container" id="accelChart"></div>
+            </div>
+            <div class="card">
+                <div class="card-header">Lịch sử</div>
+                <div class="history-logs" id="activityLogs">
+                    <div class="log-item"><span>Khởi động</span><span class="log-time">Bây giờ</span></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">Điều khiển</div>
+                <div class="buttons">
+                    <button class="btn btn-primary" onclick="fetchData()"><i class="fas fa-sync-alt"></i> Cập nhật</button>
+                    <button class="btn btn-danger" onclick="testAlert()"><i class="fas fa-bell"></i> Kiểm tra</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
