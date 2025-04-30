@@ -57,7 +57,10 @@ function addLogEntry(message) {
 
 async function fetchData() {
     try {
-        const response = await fetch(`http://${espIP}/data`);
+        // Sử dụng CORS Anywhere làm proxy
+        const proxyUrl = "https://cors-anywhere.herokuapp.com/";
+        const apiUrl = `http://${espIP}/data`;
+        const response = await fetch(proxyUrl + apiUrl);
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
         document.getElementById("currentActivity").textContent = data.activity;
