@@ -58,7 +58,7 @@ function addLogEntry(message) {
 async function fetchData() {
     try {
         // Sử dụng CORS Anywhere làm proxy
-        const proxyUrl = "https://cors-anywhere.herokuapp.com/";
+        const proxyUrl = "https://0467-2405-4802-dc1b-9f50-e8b7-ea7c-6e16-8e79.ngrok-free.app/data";
         const apiUrl = `http://${espIP}/data`;
         const response = await fetch(proxyUrl + apiUrl);
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
