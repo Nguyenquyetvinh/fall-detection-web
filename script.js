@@ -1,51 +1,5 @@
-// Polyfill cho crypto.randomUUID
-if (!crypto.randomUUID) {
-    crypto.randomUUID = function randomUUID() {
-        return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
-            (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-        );
-    };
-}
-
 // Biến để lưu URL API
-let apiUrl = localStorage.getItem("apiUrl") || "https://1830-2405-4802-dc1b-9f50-30ae-8189-52ff-55c4.ngrok-free.app/data";
-const espIP = "192.168.1.212";
-
-// Hàm để thay đổi URL API
-function setApiUrl(newUrl) {
-    apiUrl = newUrl;
-    localStorage.setItem("apiUrl", newUrl);
-    document.getElementById("connection-status").innerHTML = '<i class="fas fa-wifi"></i> Đã kết nối';
-    document.getElementById("connection-status").style.color = "green";
-    fetchData();
-}
-
-// Thêm giao diện để người dùng nhập URL
-window.addEventListener("DOMContentLoaded", () => {
-    const urlInput = document.createElement("input");
-    urlInput.type = "text";
-    urlInput.placeholder = "Nhập URL API (e.g., https://new-url.ngrok-free.app/data)";
-    urlInput.style.margin = "10px";
-    urlInput.style.padding = "5px";
-    urlInput.style.width = "300px";
-    urlInput.value = apiUrl;
-
-    const setUrlButton = document.createElement("button");
-    setUrlButton.className = "btn btn-primary";
-    setUrlButton.innerHTML = '<i class="fas fa-link"></i> Cập nhật URL';
-    setUrlButton.onclick = () => {
-        const newUrl = urlInput.value.trim();
-        if (newUrl) {
-            setApiUrl(newUrl);
-        } else {
-            alert("Vui lòng nhập URL hợp lệ!");
-        }
-    };
-
-    const header = document.querySelector("header");
-    header.appendChild(urlInput);
-    header.appendChild(setUrlButton);
-});
+let apiUrl = "http://192.168.1.212/data"; // Cố định URL API
 
 const timeLabels = Array(20).fill().map((_, i) => i);
 const accelXData = Array(20).fill(0);
@@ -106,14 +60,6 @@ function addLogEntry(message) {
 async function fetchData() {
     try {
         const response = await fetch(apiUrl);
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        // Kiểm tra Content-Type của phản hồi
-        const contentType = response.headers.get("Content-Type");
-        if (!contentType || !contentType.includes("application/json")) {
-            throw new Error("Response is not JSON: " + contentType);
-        }
         const data = await response.json();
         document.getElementById("currentActivity").textContent = data.activity;
         document.getElementById("accelX").textContent = data.accelX.toFixed(2);
