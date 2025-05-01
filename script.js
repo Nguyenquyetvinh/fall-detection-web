@@ -106,7 +106,14 @@ function addLogEntry(message) {
 async function fetchData() {
     try {
         const response = await fetch(apiUrl);
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        // Kiểm tra Content-Type của phản hồi
+        const contentType = response.headers.get("Content-Type");
+        if (!contentType || !contentType.includes("application/json")) {
+            throw new Error("Response is not JSON: " + contentType);
+        }
         const data = await response.json();
         document.getElementById("currentActivity").textContent = data.activity;
         document.getElementById("accelX").textContent = data.accelX.toFixed(2);
@@ -146,7 +153,6 @@ async function fetchData() {
         document.getElementById("connection-status").style.color = "red";
     }
 }
-
 function testAlert() {
     const fallAlert = document.getElementById("fallAlert");
     fallAlert.style.display = "block";
