@@ -1,5 +1,41 @@
 // Biến để lưu URL API
-let apiUrl = "http://192.168.1.212/data"; // Cố định URL API
+let apiUrl = localStorage.getItem("apiUrl") || ""; // Để trống, người dùng sẽ nhập IP
+
+// Hàm để thay đổi URL API
+function setApiUrl(newUrl) {
+    apiUrl = newUrl;
+    localStorage.setItem("apiUrl", newUrl);
+    document.getElementById("connection-status").innerHTML = '<i class="fas fa-wifi"></i> Đã kết nối';
+    document.getElementById("connection-status").style.color = "green";
+    fetchData();
+}
+
+// Thêm giao diện để người dùng nhập URL
+window.addEventListener("DOMContentLoaded", () => {
+    const urlInput = document.createElement("input");
+    urlInput.type = "text";
+    urlInput.placeholder = "Nhập IP (e.g., http://192.168.1.100/data)";
+    urlInput.style.margin = "10px";
+    urlInput.style.padding = "5px";
+    urlInput.style.width = "300px";
+    urlInput.value = apiUrl;
+
+    const setUrlButton = document.createElement("button");
+    setUrlButton.className = "btn btn-primary";
+    setUrlButton.innerHTML = '<i class="fas fa-link"></i> Cập nhật IP';
+    setUrlButton.onclick = () => {
+        const newUrl = urlInput.value.trim();
+        if (newUrl) {
+            setApiUrl(newUrl);
+        } else {
+            alert("Vui lòng nhập IP hợp lệ!");
+        }
+    };
+
+    const header = document.querySelector("header");
+    header.appendChild(urlInput);
+    header.appendChild(setUrlButton);
+});
 
 const timeLabels = Array(20).fill().map((_, i) => i);
 const accelXData = Array(20).fill(0);
@@ -58,6 +94,12 @@ function addLogEntry(message) {
 }
 
 async function fetchData() {
+    if (!apiUrl) {
+        document.getElementById("connection-status").innerHTML = '<i class="fas fa-exclamation-triangle"></i> Vui lòng nhập IP';
+        document.getElementById("connection-status").style.color = "red";
+        return;
+    }
+
     try {
         const response = await fetch(apiUrl);
         const data = await response.json();
