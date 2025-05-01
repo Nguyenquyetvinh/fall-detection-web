@@ -1,6 +1,15 @@
-// Biến để lưu URL API, mặc định là ngrok hoặc IP cục bộ
-let apiUrl = localStorage.getItem("apiUrl") || "https://0467-2405-4802-dc1b-9f50-e8b7-ea7c-6e16-8e79.ngrok-free.app/data"; // Thay bằng URL ngrok mới
-const espIP = "192.168.1.212"; // IP cục bộ của ESP8266
+// Polyfill cho crypto.randomUUID
+if (!crypto.randomUUID) {
+    crypto.randomUUID = function randomUUID() {
+        return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+            (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+        );
+    };
+}
+
+// Biến để lưu URL API
+let apiUrl = localStorage.getItem("apiUrl") || "https://1830-2405-4802-dc1b-9f50-30ae-8189-52ff-55c4.ngrok-free.app/data";
+const espIP = "192.168.1.212";
 
 // Hàm để thay đổi URL API
 function setApiUrl(newUrl) {
@@ -8,10 +17,10 @@ function setApiUrl(newUrl) {
     localStorage.setItem("apiUrl", newUrl);
     document.getElementById("connection-status").innerHTML = '<i class="fas fa-wifi"></i> Đã kết nối';
     document.getElementById("connection-status").style.color = "green";
-    fetchData(); // Gọi lại dữ liệu ngay khi thay đổi URL
+    fetchData();
 }
 
-// Thêm giao diện để người dùng nhập URL (tùy chọn)
+// Thêm giao diện để người dùng nhập URL
 window.addEventListener("DOMContentLoaded", () => {
     const urlInput = document.createElement("input");
     urlInput.type = "text";
