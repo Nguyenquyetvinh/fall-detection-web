@@ -1,4 +1,43 @@
-const espIP = "192.168.1.212"; // Thay bằng IP thực tế của ESP8266
+// Biến để lưu URL API, mặc định là ngrok hoặc IP cục bộ
+let apiUrl = localStorage.getItem("apiUrl") || "https://0467-2405-4802-dc1b-9f50-e8b7-ea7c-6e16-8e79.ngrok-free.app/data"; // Thay bằng URL ngrok mới
+const espIP = "192.168.1.212"; // IP cục bộ của ESP8266
+
+// Hàm để thay đổi URL API
+function setApiUrl(newUrl) {
+    apiUrl = newUrl;
+    localStorage.setItem("apiUrl", newUrl);
+    document.getElementById("connection-status").innerHTML = '<i class="fas fa-wifi"></i> Đã kết nối';
+    document.getElementById("connection-status").style.color = "green";
+    fetchData(); // Gọi lại dữ liệu ngay khi thay đổi URL
+}
+
+// Thêm giao diện để người dùng nhập URL (tùy chọn)
+window.addEventListener("DOMContentLoaded", () => {
+    const urlInput = document.createElement("input");
+    urlInput.type = "text";
+    urlInput.placeholder = "Nhập URL API (e.g., https://new-url.ngrok-free.app/data)";
+    urlInput.style.margin = "10px";
+    urlInput.style.padding = "5px";
+    urlInput.style.width = "300px";
+    urlInput.value = apiUrl;
+
+    const setUrlButton = document.createElement("button");
+    setUrlButton.className = "btn btn-primary";
+    setUrlButton.innerHTML = '<i class="fas fa-link"></i> Cập nhật URL';
+    setUrlButton.onclick = () => {
+        const newUrl = urlInput.value.trim();
+        if (newUrl) {
+            setApiUrl(newUrl);
+        } else {
+            alert("Vui lòng nhập URL hợp lệ!");
+        }
+    };
+
+    const header = document.querySelector("header");
+    header.appendChild(urlInput);
+    header.appendChild(setUrlButton);
+});
+
 const timeLabels = Array(20).fill().map((_, i) => i);
 const accelXData = Array(20).fill(0);
 const accelYData = Array(20).fill(0);
@@ -57,7 +96,6 @@ function addLogEntry(message) {
 
 async function fetchData() {
     try {
-        const apiUrl = "https://0467-2405-4802-dc1b-9f50-e8b7-ea7c-6e16-8e79.ngrok-free.app/data"; // Chỉ dùng URL ngrok
         const response = await fetch(apiUrl);
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
@@ -99,6 +137,7 @@ async function fetchData() {
         document.getElementById("connection-status").style.color = "red";
     }
 }
+
 function testAlert() {
     const fallAlert = document.getElementById("fallAlert");
     fallAlert.style.display = "block";
