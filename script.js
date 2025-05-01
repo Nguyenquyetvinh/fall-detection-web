@@ -153,6 +153,7 @@ async function fetchData() {
         document.getElementById("connection-status").style.color = "red";
     }
 }
+
 function testAlert() {
     const fallAlert = document.getElementById("fallAlert");
     fallAlert.style.display = "block";
