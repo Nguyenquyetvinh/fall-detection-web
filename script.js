@@ -57,10 +57,8 @@ function addLogEntry(message) {
 
 async function fetchData() {
     try {
-        // Sử dụng CORS Anywhere làm proxy
-        const proxyUrl = "https://7511-2405-4802-dc1b-9f50-30ae-8189-52ff-55c4.ngrok-free.app/data";
-        const apiUrl = `http://${espIP}/data`;
-        const response = await fetch(proxyUrl + apiUrl);
+        const apiUrl = "https://0467-2405-4802-dc1b-9f50-e8b7-ea7c-6e16-8e79.ngrok-free.app/data"; // Chỉ dùng URL ngrok
+        const response = await fetch(apiUrl);
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
         document.getElementById("currentActivity").textContent = data.activity;
@@ -101,7 +99,6 @@ async function fetchData() {
         document.getElementById("connection-status").style.color = "red";
     }
 }
-
 function testAlert() {
     const fallAlert = document.getElementById("fallAlert");
     fallAlert.style.display = "block";
